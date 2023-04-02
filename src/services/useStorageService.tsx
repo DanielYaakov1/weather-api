@@ -9,7 +9,7 @@ const useStorageService = (): IStorageService => {
           localStorage.setItem(key, value);
      };
 
-     const getItem = (key: string): string | null => {
+     const getItem = (key: string) => {
           return localStorage.getItem(key);
      };
 

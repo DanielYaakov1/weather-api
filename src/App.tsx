@@ -1,15 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
 import HomePage from './views/HomePage';
 import './App.css';
 import Header from './components/header';
+import { Routes, Route } from 'react-router-dom';
+import Favorites from './views/favorites';
 
 function App() {
      return (
           <div className='App'>
                <Header />
-               <header className='App-header'></header>
-               <HomePage></HomePage>
+               <Routes>
+                    <Route path='/' element={<HomePage />} />
+                    <Route path='/favorites' element={<Favorites />} />
+               </Routes>
           </div>
      );
 }

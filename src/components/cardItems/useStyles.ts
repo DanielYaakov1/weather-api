@@ -1,7 +1,10 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
-     root: {},
+     cardItems: {
+          display: 'flex',
+          flexWrap: 'wrap',
+     },
 });
 
 export default useStyles;

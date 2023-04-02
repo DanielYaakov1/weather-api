@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link, useMatch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,12 +11,26 @@ const useStyles = makeStyles(theme => ({
      appBar: {
           backgroundColor: '#fff',
           color: '#000',
+          display: 'flex',
+          flexDirection: 'row',
      },
      title: {
           flexGrow: 1,
      },
      iconButton: {
           marginLeft: theme.spacing(1),
+          color: '#000',
+     },
+     activeIcon: {
+          '& .MuiIconButton-root': {
+               color: 'green',
+               animation: '$bounce 0.5s linear',
+          },
+     },
+     '@keyframes bounce': {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)' },
      },
 }));
 
@@ -26,16 +40,16 @@ const Header = () => {
      return (
           <AppBar position='static' className={classes.appBar}>
                <Toolbar>
-                    <Link to='/' className={classes.title}>
+                    <NavLink to='/' className={({ isActive }) => (isActive ? classes.activeIcon : classes.title)}>
                          <IconButton>
                               <HomeIcon />
                          </IconButton>
-                    </Link>
-                    <Link to='/favorites' className={classes.iconButton}>
+                    </NavLink>
+                    <NavLink to='/favorites' className={({ isActive }) => (isActive ? classes.activeIcon : classes.iconButton)}>
                          <IconButton>
                               <FavoriteIcon />
                          </IconButton>
-                    </Link>
+                    </NavLink>
                </Toolbar>
           </AppBar>
      );

@@ -1,29 +1,32 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import axios from 'axios';
 import useStorageService from '../services/useStorageService';
+import { FIVE_DAYS_MOCK } from '../mock/data';
 
 const useHttp = () => {
      const storageService = useStorageService();
-     const httpRequest = useCallback(async (url: string, method = 'GET', data: string | null = null, headers: Record<string, string> = {}) => {
+     const [isErrorMessageHttpRequest, setIsErrorMessageHttpRequest] = useState('');
+     const httpRequest = useCallback(async (url: string, method = 'GET', data: string | null = null, headers: Record<string, string> = {}, params: Record<string, any> = {}) => {
           try {
                if (data) {
                     data = JSON.stringify(data);
                     headers['Content-Type'] = 'application/json';
                }
-               const response = await axios({ url, method, data, headers });
+               const response = await axios({ url, method, data, headers, params });
                const resData = await response.data;
                return resData;
-          } catch (err: any) {
-               if (err.response.status === 401) {
-                    //Handle authenticated
+          } catch (error: any) {
+               if (error.response && error.response.status === 401) {
+                    // handle 401 error
+               } else {
+                    // handle other errors
+                    setIsErrorMessageHttpRequest('Something Went wrong!');
+                    return FIVE_DAYS_MOCK;
                }
-               throw err;
-          } finally {
-               //TODO: set all loaders to false
           }
      }, []);
      const clearError = useCallback(() => {}, []);
 
-     return { httpRequest, clearError };
+     return { httpRequest, clearError, isErrorMessageHttpRequest };
 };
 export default useHttp;
