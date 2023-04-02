@@ -9,17 +9,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { ICurrentWeather } from '../../views/HomePage/HomePage';
 
-interface ICard {
-     date: Date;
-     temperature: {
-          Maximum: {
-               Unit: string;
-               Value: number;
-          };
-     };
-     isFavoriteIcon: boolean;
-}
-interface ICurrentWeather1 {
+interface ICurrtWeather {
      WeatherText: string;
      Temperature: {
           Metric: {
@@ -34,15 +24,19 @@ interface WeatherCardProps {
 }
 
 export default function CurrentWeatherCard({ currentWeather, location }: WeatherCardProps) {
-     //console.log('🚀 ~ file: current-weather-card.tsx:28 ~ CurrentWeatherCard ~ currentWeather:', currentWeather?.WeatherText);
-     // console.log(
-     //      '🚀 ~ file: current-weather-card.tsx:28 ~ CurrentWeatherCard ~ currentWeather:',
-     //      currentWeather.map((data: ICurrentWeather) => {
-     //           return data.WeatherText;
-     //      })
-     // );
-     console.log('typo of curr', currentWeather);
-     console.log('curr index 0', currentWeather[0]);
+     console.log('🚀 ~ file: current-weather-card.tsx:27 ~ CurrentWeatherCard ~ location:', location);
+     const [isFavorite, setIsFavorite] = React.useState(false);
+
+     const handleFavorite = React.useCallback(() => {
+          if (isFavorite) {
+               debugger;
+               console.log(location[0]?.key);
+               localStorage.setItem('locationKey', location[0]?.key);
+               setIsFavorite(true);
+          }
+          localStorage.removeItem('locationKey');
+          setIsFavorite(false);
+     }, [isFavorite, location]);
 
      return (
           <Card sx={{ minWidth: 275, margin: '7px 7px' }}>
@@ -57,13 +51,12 @@ export default function CurrentWeatherCard({ currentWeather, location }: Weather
                                    </div>
                               );
                          })} */}
-
                          <div>{location[0]?.name}</div>
                          <div>{currentWeather[0]?.Temperature?.Metric.Value} °C</div>
                     </Typography>
                </CardContent>
                <CardActions>
-                    <IconButton aria-label='add to favorites'>
+                    <IconButton onClick={() => handleFavorite} aria-label='add to favorites'>
                          <FavoriteIcon />
                     </IconButton>
                </CardActions>
