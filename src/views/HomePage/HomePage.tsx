@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import useStyles from './useStyles';
 import useStorageService from '../../services/useStorageService';
-import WeatherAction from '../../actions/weather-action';
+import useWeatherAction from '../../actions/weather-action';
 import { CURR_WEATHER_TEL_AVIV, FIVE_DAYS_MOCK } from '../../mock/data';
 import Search from '../../components/search';
 import { onlyEnglishLetters } from '../../utils/validation.helper';
@@ -34,11 +34,16 @@ export interface DailyForecast1 {
      weatherText: string;
 }
 
-const HomePage = () => {
+interface IHomepage {
+     favorites: ILocation[];
+     setFavorites: React.Dispatch<React.SetStateAction<ILocation[]>>;
+}
+
+const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const classes = useStyles();
-     const { weatherForecast5DaysByCityName, searchLocationByName, getCurrentWeather, getDailyForecast } = WeatherAction();
+     const { weatherForecast5DaysByCityName, searchLocationByName, getCurrentWeather, getDailyForecast } = useWeatherAction();
      const storageService = useStorageService();
-     const [data, setData] = useState([]);
+     const [forecast, setForecast] = useState([]);
      const [searchInput, setSearchInput] = useState('');
      const [isErrorSearch, setIsErrorSearch] = useState('');
      const fiveDays = JSON.stringify(FIVE_DAYS_MOCK);
@@ -46,13 +51,14 @@ const HomePage = () => {
 
      //------------------------------------------------------------------------------
      const [searchText, setSearchText] = useState('');
-     const [location, setLocation] = useState<ILocation[]>([]);
+     const [locations, setLocations] = useState<ILocation[]>([]); //add selected location
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
      const [dailyForecast, setDailyForecast] = useState<DailyForecast1[]>([]);
      const [isFavorite, setIsFavorite] = useState(false);
      //------------------------------------------------------------------------------
 
      // useEffect(() => {
+     //default value for tel aviv location
      //      const fetchData = async () => {
      //           try {
      //                const res = await weatherForecast5DaysByCityName(cityTelAviv);
@@ -69,8 +75,7 @@ const HomePage = () => {
      useEffect(() => {
           const savedDataStr = storageService.getItem('testDaniel');
           const savedData = JSON.parse(savedDataStr as any);
-          console.log('🚀 ~ file: HomePage.tsx:39 ~ useEffect ~ savedData:', savedData);
-          setData(savedData);
+          setForecast(savedData); // data - bad name
      }, []);
 
      const handleSearch = useCallback(
@@ -84,7 +89,7 @@ const HomePage = () => {
                          const weather5Days = await weatherForecast5DaysByCityName(e.target.value);
                          const dataStr = JSON.stringify(weather5Days);
                          storageService.setItem('weather5Days', dataStr);
-                         setData(weather5Days);
+                         setForecast(weather5Days);
                     }
                } else {
                     setIsErrorSearch('Search can be only English!');
@@ -106,20 +111,12 @@ const HomePage = () => {
           setSearchText(text);
           if (text.length >= 7) {
                const results = await searchLocationByName(text);
-               setLocation(results);
+               // this is plural
+               setLocations(results);
                const currentRes = await getCurrentWeather(results[0].key);
                setCurrentWeather(currentRes as any);
           }
      };
-
-     const handleLocationSelect = async (location: any) => {
-          setIsFavorite(false);
-          setSearchText(location.LocalizedName);
-          //setLocation([]);
-          localStorage.removeItem('locationKey');
-          fetchCurrentWeatherAndForecast(location.Key);
-     };
-
      const fetchCurrentWeatherAndForecast = async (locationKey: any) => {
           const [current, forecast] = await Promise.all([getCurrentWeather(locationKey), getDailyForecast(locationKey)]);
           setCurrentWeather(current as any);
@@ -127,22 +124,15 @@ const HomePage = () => {
           localStorage.setItem('locationKey', locationKey);
      };
 
-     const handleFavoriteClick = () => {
-          if (isFavorite) {
-               setIsFavorite(false);
-               localStorage.removeItem('locationKey');
-          } else {
-               setIsFavorite(true);
-          }
-     };
-
      return (
           <div className={classes.root}>
-               <SearchBar searchText={searchText} onSearch={handleSearch1} onLocationSelect={handleLocationSelect} />
+               <SearchBar searchText={searchText} onSearch={handleSearch1} />
                {/* <div className={classes.search}>
                     <Search isErrorMessage={isErrorSearch} handleChangeValue={handleSearch} value={searchInput} placeholder={'Search'}></Search>
                </div> */}
-               <CardItems location={location} currentWeather={currentWeather} forecast={data} />
+
+               {/* this should receive a single location */}
+               <CardItems setFavorites={setFavorites} favorites={favorites} location={locations} currentWeather={currentWeather} forecast={forecast} />
           </div>
      );
 };

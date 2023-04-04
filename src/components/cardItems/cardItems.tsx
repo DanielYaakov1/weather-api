@@ -1,29 +1,26 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import BasicCard from '../card/card';
 import useStyles from './useStyles';
 import WeatherForecast, { DailyForecast, Forecast } from '../../types/weatherForecast';
-import CurrentWeatherCard from '../card/current-weather-card';
-import { DailyForecast1, ICurrentWeather, ILocation } from '../../views/HomePage/HomePage';
+import { CurrentWeatherCard } from '../card/current-weather-card';
+import { ICurrentWeather, ILocation } from '../../views/HomePage/HomePage';
 
 interface IDailyForecasts {
-     Headline: any;
      DailyForecasts: DailyForecast[];
 }
 
 interface ICardItems {
      forecast: IDailyForecasts[];
-     currentWeather: ICurrentWeather[] | undefined;
+     currentWeather: ICurrentWeather[];
      location: ILocation[];
+     favorites?: ILocation[];
+     setFavorites: React.Dispatch<React.SetStateAction<ILocation[]>>;
 }
 
-const CardItems = React.memo(({ forecast, currentWeather, location }: ICardItems) => {
+export const CardItems = React.memo(({ forecast, currentWeather, location, favorites = [], setFavorites }: ICardItems) => {
      const classes = useStyles();
+
+     const isFavorite = !!favorites.find(favorite => favorite.key === location[0]?.key);
 
      return (
           <React.Fragment>
@@ -33,7 +30,7 @@ const CardItems = React.memo(({ forecast, currentWeather, location }: ICardItems
                          display: 'inline-block',
                          margin: 7,
                     }}>
-                    <CurrentWeatherCard location={location} currentWeather={currentWeather}></CurrentWeatherCard>
+                    <CurrentWeatherCard setFavorites={setFavorites} isFavorite={isFavorite} location={location} currentWeather={currentWeather} />
                </div>
                <div className={classes.cardItems}>
                     {forecast &&
@@ -48,4 +45,3 @@ const CardItems = React.memo(({ forecast, currentWeather, location }: ICardItems
           </React.Fragment>
      );
 });
-export default CardItems;

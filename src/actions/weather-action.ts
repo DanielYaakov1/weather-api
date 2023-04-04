@@ -1,10 +1,5 @@
 import { ILocation } from './../views/HomePage/HomePage';
-import useHttp from '../hooks/useHttp';
-
-const SEARCH_BY_CITY_NAME_URL = 'http://dataservice.accuweather.com/locations/v1/cities/autocomplete';
-const CURRENT_WEATHER_URL = 'http://dataservice.accuweather.com/currentconditions/v1';
-const FIVE_DAYS_DAILY_FORECAST_URL = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day';
-const apiKey = 'tPl3QGT9w9mLN2AF7bKcSc785t18btvO';
+import { useHttp } from '../hooks/useHttp';
 
 const API_KEY = 'tPl3QGT9w9mLN2AF7bKcSc785t18btvO';
 const BASE_URL = 'http://dataservice.accuweather.com';
@@ -29,7 +24,7 @@ export interface DailyForecast {
      weatherText: string;
 }
 
-const WeatherAction = () => {
+const useWeatherAction = () => {
      const { httpRequest } = useHttp();
 
      const getCurrentWeather = async (locationKeys: string): Promise<CurrentWeather> => {
@@ -57,14 +52,12 @@ const WeatherAction = () => {
           //                    q: name,
           //               },
           //          };
-          const res = await httpRequest(`${BASE_URL}/locations/v1/cities/autocomplete?apikey=${API_KEY}&q=${name}`);
-          const data = res;
-          //return res;
+          const res = await httpRequest(`${BASE_URL}/locations/v1/cities/autocomplete?apikey=${API_KEY}&q=${encodeURIComponent(name)}`);
           return res.map((location: any) => ({
                key: location.Key,
                name: location.LocalizedName,
-               //country: location.Country.LocalizedName,
-               // region: location?.Region?.LocalizedName,
+               country: location.Country.LocalizedName,
+               region: location?.Region?.LocalizedName,
           }));
      };
 
@@ -89,10 +82,6 @@ const WeatherAction = () => {
           }));
      };
 
-     interface WeatherCity {
-          key: string;
-     }
-
      const weatherForecast5DaysByCityName = async (name: string): Promise<any> => {
           try {
                const weatherByCityName = await searchLocationByName(name);
@@ -106,26 +95,4 @@ const WeatherAction = () => {
 
      return { getDailyForecast, searchLocationByName, getCurrentWeather, weatherForecast5DaysByCityName };
 };
-export default WeatherAction;
-
-//      const get5DaysDailyForecastById = async (locationKeys: string[]) => {
-//           // Convert locationKeys to an array if it's a string | string
-//           //   if (typeof locationKeys === 'string') {
-//           //        locationKeys = [locationKeys];
-//           //   }
-//           const idsWithApiKey = locationKeys.map(id => `${id}?apikey=${apiKey}&metric=true`);
-//
-//           const forecasts = await Promise.all(
-//                idsWithApiKey.map(async id => {
-//                     try {
-//                          const res = await httpRequest(`${FIVE_DAYS_DAILY_FORECAST_URL}/${id}`);
-//                          return res;
-//                     } catch (e) {
-//                          console.log(`Error fetching forecast for location ${id}: ${e}`);
-//                          return null;
-//                     }
-//                })
-//           );
-//
-//           return forecasts.filter(forecast => forecast !== null);
-//      };
+export default useWeatherAction;
