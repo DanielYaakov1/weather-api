@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BasicCard from '../card/card';
 import useStyles from './useStyles';
-import WeatherForecast, { DailyForecast, Forecast } from '../../types/weatherForecast';
+import { DailyForecast } from '../../types/weatherForecast';
 import { CurrentWeatherCard } from '../card/current-weather-card';
 import { ICurrentWeather, ILocation } from '../../views/HomePage/HomePage';
 
@@ -30,7 +30,7 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
                          display: 'inline-block',
                          margin: 7,
                     }}>
-                    <CurrentWeatherCard setFavorites={setFavorites} isFavorite={isFavorite} location={location} currentWeather={currentWeather} />
+                    <CurrentWeatherCard setFavorites={setFavorites} isFavorite={isFavorite} location={location[0]} currentWeather={currentWeather[0]} />
                </div>
                <div className={classes.cardItems}>
                     {forecast &&

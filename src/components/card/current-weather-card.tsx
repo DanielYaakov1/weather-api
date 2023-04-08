@@ -1,46 +1,43 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { ICurrentWeather, ILocation } from '../../views/HomePage/HomePage';
+import useStyles from './useStyles';
+
 interface WeatherCardProps {
-     currentWeather: ICurrentWeather[];
-     location: ILocation[];
+     currentWeather: ICurrentWeather;
+     location: ILocation;
      isFavorite: boolean;
      setFavorites: React.Dispatch<React.SetStateAction<ILocation[]>>;
 }
 
 export const CurrentWeatherCard = ({ currentWeather, location, isFavorite, setFavorites }: WeatherCardProps) => {
+     const classes = useStyles();
+
      const handleFavorite = React.useCallback(() => {
-          const selectedLocation = location[0];
+          const selectedLocation = location;
           if (isFavorite) {
                setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.key !== selectedLocation.key));
           } else {
                setFavorites((prevFavorites: ILocation[]) => [...prevFavorites, selectedLocation]);
           }
-
-          debugger;
      }, [isFavorite, location, setFavorites]);
 
      return (
-          <Card sx={{ minWidth: 275, margin: '7px 7px' }}>
-               <CardContent>
-                    <Typography variant='h5' component='div'></Typography>
-                    <Typography variant='h4' sx={{ mt: 2, mx: '2px' }} color='text.primary'>
-                         <div>{location[0]?.name}</div>
-                         <div>{currentWeather[0]?.Temperature?.Metric.Value} °C</div>
-                    </Typography>
-               </CardContent>
-               <CardActions>
+          <>
+               <div className={classes.card}>
+                    <div className={classes.title}>
+                         <div>{location?.name}</div>
+                    </div>
+                    <div className={classes.temperature}>
+                         <div>{currentWeather && currentWeather?.Temperature?.Metric.Value} °C</div>
+                    </div>
                     {location && (
-                         <IconButton onClick={handleFavorite} aria-label='add to favorites'>
+                         <IconButton onClick={handleFavorite} aria-label='add to favorites' style={{ color: isFavorite ? 'red' : '' }}>
                               <FavoriteIcon />
                          </IconButton>
                     )}
-               </CardActions>
-          </Card>
+               </div>
+          </>
      );
 };

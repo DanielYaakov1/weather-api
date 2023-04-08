@@ -13,13 +13,14 @@ import { ILocation } from './views/HomePage/HomePage';
 
 function App() {
      const [favorites, setFavorites] = useState<ILocation[]>([]);
+     const isFavorite = !!favorites.find(favorite => favorite.key === favorites[0]?.key);
 
      return (
           <div className='App'>
                <Header />
                <Routes>
                     <Route path='/' element={<HomePage favorites={favorites} setFavorites={setFavorites} />} />
-                    <Route path='/favorites' element={<Favorites favorites={favorites} setFavorites={setFavorites} />} />
+                    <Route path='/favorites' element={<Favorites favorites={favorites} setFavorites={setFavorites} isFavorite={isFavorite} />} />
                </Routes>
           </div>
      );
