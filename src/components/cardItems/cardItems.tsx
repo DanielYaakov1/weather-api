@@ -5,7 +5,7 @@ import { DailyForecast } from '../../types/weatherForecast';
 import { CurrentWeatherCard } from '../card/current-weather-card';
 import { ICurrentWeather, ILocation } from '../../views/HomePage/HomePage';
 
-interface IDailyForecasts {
+export interface IDailyForecasts {
      DailyForecasts: DailyForecast[];
 }
 
@@ -20,7 +20,7 @@ interface ICardItems {
 export const CardItems = React.memo(({ forecast, currentWeather, location, favorites = [], setFavorites }: ICardItems) => {
      const classes = useStyles();
 
-     const isFavorite = !!favorites.find(favorite => favorite.key === location[0]?.key);
+     const isFavorite = !!favorites.find(favorite => favorite.Key === location[0]?.Key);
 
      return (
           <React.Fragment>

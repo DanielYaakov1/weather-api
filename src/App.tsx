@@ -5,15 +5,10 @@ import Header from './components/header';
 import { Routes, Route } from 'react-router-dom';
 import Favorites from './views/favorites';
 import { ILocation } from './views/HomePage/HomePage';
-//   {
-//                key: '215854',
-//                name: 'Tel Aviv',
-//                country: 'Israel',
-//           },
 
 function App() {
      const [favorites, setFavorites] = useState<ILocation[]>([]);
-     const isFavorite = !!favorites.find(favorite => favorite.key === favorites[0]?.key);
+     const isFavorite = !!favorites.find(favorite => favorite.Key === favorites[0]?.Key);
 
      return (
           <div className='App'>

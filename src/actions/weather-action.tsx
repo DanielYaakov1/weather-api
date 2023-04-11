@@ -1,22 +1,9 @@
-import { ILocation } from '../views/HomePage/HomePage';
+import { ICurrentWeather, ILocation } from '../views/HomePage/HomePage';
 import { useHttp } from '../hooks/useHttp';
 import { useCallback } from 'react';
 
 const API_KEY = 'tPl3QGT9w9mLN2AF7bKcSc785t18btvO';
 const BASE_URL = 'http://dataservice.accuweather.com';
-
-export interface Location {
-     Key: string;
-     name: string;
-     country: string;
-     region?: string;
-     LocalizedName?: string;
-}
-
-export interface CurrentWeather {
-     temperature: number;
-     weatherText: string;
-}
 
 export interface DailyForecast {
      date: string;
@@ -29,9 +16,9 @@ const useWeatherAction = () => {
      const { httpRequest } = useHttp();
 
      const getCurrentWeather = useCallback(
-          async (locationKeys: string): Promise<CurrentWeather> => {
+          async (locationKeys: string): Promise<ICurrentWeather[]> => {
                const res = await httpRequest(`${BASE_URL}/currentconditions/v1/${locationKeys}?apikey=${API_KEY}`);
-               const currentWeather = res.map((weather: any) => {
+               const currentWeather = res.map((weather: ICurrentWeather) => {
                     return {
                          WeatherText: weather.WeatherText,
                          Temperature: {
@@ -48,21 +35,12 @@ const useWeatherAction = () => {
 
      const searchLocationByName = useCallback(
           async (name: string): Promise<ILocation[]> => {
-               //     'GET',
-               //          null,
-               //          {},
-               //          {
-               //               params: {
-               //                    apikey: API_KEY,
-               //                    q: name,
-               //               },
-               //          };
                const res = await httpRequest(`${BASE_URL}/locations/v1/cities/autocomplete?apikey=${API_KEY}&q=${encodeURIComponent(name)}`);
-               return res.map((location: any) => ({
-                    key: location.Key,
+               return res.map((location: ILocation) => ({
+                    Key: location.Key,
                     name: location.LocalizedName,
-                    country: location.Country.LocalizedName,
-                    region: location?.Region?.LocalizedName,
+                    country: location.Country,
+                    region: location.region,
                }));
           },
           [httpRequest]

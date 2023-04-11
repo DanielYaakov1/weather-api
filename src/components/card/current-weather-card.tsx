@@ -17,7 +17,7 @@ export const CurrentWeatherCard = ({ currentWeather, location, isFavorite, setFa
      const handleFavorite = React.useCallback(() => {
           const selectedLocation = location;
           if (isFavorite) {
-               setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.key !== selectedLocation.key));
+               setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.Key !== selectedLocation.Key));
           } else {
                setFavorites((prevFavorites: ILocation[]) => [...prevFavorites, selectedLocation]);
           }

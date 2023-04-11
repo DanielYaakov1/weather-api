@@ -12,15 +12,15 @@ interface IFavorites {
 }
 
 export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) => {
+     console.log('🚀 ~ file: favorites.tsx:15 ~ Favorites ~ isFavorite:', isFavorite);
      const classes = useStyles();
      const { getCurrentWeather } = useWeatherAction();
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
-     console.log('🚀 ~ file: favorites.tsx:20 ~ Favorites ~ currentWeather:', currentWeather);
 
      useEffect(() => {
           const fetchCurrentWeather = async () => {
                const weatherPromises = favorites.map((location: ILocation) => {
-                    return getCurrentWeather(location.key);
+                    return getCurrentWeather(location.Key);
                });
                const weatherData = await Promise.all(weatherPromises);
                setCurrentWeather(weatherData as any);
@@ -31,7 +31,7 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
      const handleFavorite = React.useCallback(
           (selectedLocation: ILocation) => {
                if (isFavorite) {
-                    setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.key !== selectedLocation.key));
+                    setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.Key !== selectedLocation.Key));
                } else {
                     setFavorites((prevFavorites: ILocation[]) => [...prevFavorites, selectedLocation]);
                }
@@ -42,7 +42,10 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
      return (
           <>
                {favorites.length ? (
-                    <div>
+                    <div
+                         style={{
+                              display: 'flex',
+                         }}>
                          {favorites.map((favoritesLocation: ILocation, i: number) => {
                               return (
                                    <div key={i}>
