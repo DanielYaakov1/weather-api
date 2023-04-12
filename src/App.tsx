@@ -4,7 +4,7 @@ import './App.css';
 import Header from './components/header';
 import { Routes, Route } from 'react-router-dom';
 import Favorites from './views/favorites';
-import { ILocation } from './views/HomePage/HomePage';
+import { ILocation } from './types/weatherForecast';
 
 function App() {
      const [favorites, setFavorites] = useState<ILocation[]>([]);

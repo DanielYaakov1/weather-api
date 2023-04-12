@@ -1,8 +1,8 @@
 import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
-import { ICurrentWeather, ILocation } from '../../views/HomePage/HomePage';
 import useStyles from './useStyles';
+import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
 
 interface WeatherCardProps {
      currentWeather: ICurrentWeather;

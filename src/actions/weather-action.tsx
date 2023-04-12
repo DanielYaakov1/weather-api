@@ -1,6 +1,6 @@
-import { ICurrentWeather, ILocation } from '../views/HomePage/HomePage';
 import { useHttp } from '../hooks/useHttp';
 import { useCallback } from 'react';
+import { ICurrentWeather, ILocation } from '../types/weatherForecast';
 
 const API_KEY = 'tPl3QGT9w9mLN2AF7bKcSc785t18btvO';
 const BASE_URL = 'http://dataservice.accuweather.com';
@@ -23,7 +23,7 @@ const useWeatherAction = () => {
                          WeatherText: weather.WeatherText,
                          Temperature: {
                               Metric: {
-                                   Value: weather.Temperature.Metric.Value,
+                                   Value: weather.Temperature.Metric?.Value,
                               },
                          },
                     };
@@ -48,42 +48,28 @@ const useWeatherAction = () => {
 
      const getDailyForecast = useCallback(
           async (locationKey: string): Promise<DailyForecast[]> => {
+               //debugger;
                const res = await httpRequest(
                     `${BASE_URL}/forecasts/v1/daily/5day/${locationKey}`,
                     'GET',
                     null,
                     {},
                     {
-                         params: {
-                              apikey: API_KEY,
-                              metric: true,
-                         },
+                         apikey: API_KEY,
+                         metric: true,
                     }
                );
-               return res.data.DailyForecasts.map((forecast: any) => ({
-                    date: forecast.Date,
-                    minTemp: forecast.Temperature.Minimum.Value,
-                    maxTemp: forecast.Temperature.Maximum.Value,
-                    weatherText: forecast.Day.IconPhrase,
-               }));
+               // return res.data.DailyForecasts?.map((forecast: any) => ({
+               //      date: forecast.Date,
+               //      minTemp: forecast.Temperature.Minimum.Value,
+               //      maxTemp: forecast.Temperature.Maximum.Value,
+               //      weatherText: forecast.Day.IconPhrase,
+               // }))
+               return res;
           },
           [httpRequest]
      );
 
-     const weatherForecast5DaysByCityName = useCallback(
-          async (name: string): Promise<any> => {
-               try {
-                    const weatherByCityName = await searchLocationByName(name);
-                    const fiveDaysForecast = await getDailyForecast(weatherByCityName as any);
-                    return fiveDaysForecast;
-               } catch (error) {
-                    if (error instanceof Error) console.error(`Error fetching weather forecast: ${error.message}`);
-                    throw new Error('Failed to fetch weather forecast');
-               }
-          },
-          [getDailyForecast, searchLocationByName]
-     );
-
-     return { getDailyForecast, searchLocationByName, getCurrentWeather, weatherForecast5DaysByCityName };
+     return { getDailyForecast, searchLocationByName, getCurrentWeather };
 };
 export default useWeatherAction;

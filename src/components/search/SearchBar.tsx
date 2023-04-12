@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import { ILocation } from './HomePage';
+import React, { memo, useState } from 'react';
 
 interface SearchBarProps {
      searchText: string;
-     //onSearch: (text: string) => void;
      onSearch: (text: string) => void;
      placeholder: string;
      isErrorMessage: string;
 }
 
-const SearchBar = ({ searchText, onSearch, placeholder, isErrorMessage }: SearchBarProps) => {
+const SearchBar = memo(({ searchText, onSearch, placeholder, isErrorMessage }: SearchBarProps) => {
      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           onSearch(event.target.value);
      };
@@ -20,6 +18,6 @@ const SearchBar = ({ searchText, onSearch, placeholder, isErrorMessage }: Search
                <p style={{ color: 'red' }}>{isErrorMessage}</p>
           </div>
      );
-};
+});
 
 export default SearchBar;

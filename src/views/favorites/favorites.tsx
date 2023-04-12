@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CurrentWeatherCard } from '../../components/card/current-weather-card';
-import { ICurrentWeather, ILocation } from '../HomePage/HomePage';
+
 import useStyles from './useStyles';
 import useWeatherAction from '../../actions/weather-action';
 import React from 'react';
+import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
 
 interface IFavorites {
      favorites: ILocation[];
@@ -12,7 +13,6 @@ interface IFavorites {
 }
 
 export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) => {
-     console.log('🚀 ~ file: favorites.tsx:15 ~ Favorites ~ isFavorite:', isFavorite);
      const classes = useStyles();
      const { getCurrentWeather } = useWeatherAction();
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
