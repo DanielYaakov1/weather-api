@@ -1,15 +1,11 @@
 import * as React from 'react';
 import BasicCard from '../card/card';
 import useStyles from './useStyles';
-import { DailyForecast, ICurrentWeather, ILocation } from '../../types/weatherForecast';
+import { IDailyForecast, ICurrentWeather, ILocation } from '../../types/weatherForecast';
 import { CurrentWeatherCard } from '../card/current-weather-card';
 
-export interface IDailyForecasts {
-     DailyForecasts: DailyForecast[];
-}
-
 interface ICardItems {
-     forecast: IDailyForecasts[];
+     forecast: IDailyForecast[];
      currentWeather: ICurrentWeather[];
      location: ILocation;
      favorites?: ILocation[];
@@ -17,7 +13,6 @@ interface ICardItems {
 }
 
 export const CardItems = React.memo(({ forecast, currentWeather, location, favorites = [], setFavorites }: ICardItems) => {
-     console.log('🚀 ~ file: cardItems.tsx:20 ~ CardItems ~ forecast:', forecast);
      const classes = useStyles();
 
      const isFavorite = !!favorites.find(favorite => favorite.Key === location?.Key);
@@ -34,7 +29,7 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
                </div>
                <div className={classes.cardItems}>
                     {forecast &&
-                         forecast[0]?.DailyForecasts?.map((_dailyForecast: DailyForecast) => {
+                         forecast.map((_dailyForecast: IDailyForecast) => {
                               return (
                                    <div key={_dailyForecast.EpochDate} className='card'>
                                         <BasicCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} />

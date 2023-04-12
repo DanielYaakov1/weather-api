@@ -1,16 +1,9 @@
 import { useHttp } from '../hooks/useHttp';
 import { useCallback } from 'react';
-import { ICurrentWeather, ILocation } from '../types/weatherForecast';
+import { ICurrentWeather, ILocation, IDailyForecast } from '../types/weatherForecast';
 
 const API_KEY = 'tPl3QGT9w9mLN2AF7bKcSc785t18btvO';
 const BASE_URL = 'http://dataservice.accuweather.com';
-
-export interface DailyForecast {
-     date: string;
-     minTemp: number;
-     maxTemp: number;
-     weatherText: string;
-}
 
 const useWeatherAction = () => {
      const { httpRequest } = useHttp();
@@ -47,8 +40,7 @@ const useWeatherAction = () => {
      );
 
      const getDailyForecast = useCallback(
-          async (locationKey: string): Promise<DailyForecast[]> => {
-               //debugger;
+          async (locationKey: string): Promise<IDailyForecast[]> => {
                const res = await httpRequest(
                     `${BASE_URL}/forecasts/v1/daily/5day/${locationKey}`,
                     'GET',
@@ -59,13 +51,14 @@ const useWeatherAction = () => {
                          metric: true,
                     }
                );
-               // return res.data.DailyForecasts?.map((forecast: any) => ({
-               //      date: forecast.Date,
-               //      minTemp: forecast.Temperature.Minimum.Value,
-               //      maxTemp: forecast.Temperature.Maximum.Value,
-               //      weatherText: forecast.Day.IconPhrase,
-               // }))
-               return res;
+               return res.DailyForecasts.map((forecast: IDailyForecast) => ({
+                    Date: forecast.Date,
+                    minTemp: forecast.Temperature.Minimum.Value,
+                    maxTemp: forecast.Temperature.Maximum.Value,
+                    UnitType: forecast.Temperature.Maximum.UnitType,
+                    Temperature: forecast.Temperature,
+                    EpochDate: forecast.EpochDate,
+               }));
           },
           [httpRequest]
      );

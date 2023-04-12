@@ -1,4 +1,4 @@
-export interface DailyForecast {
+export interface IDailyForecast {
      [x: string]: any;
      Date: Date;
      EpochDate: number;
@@ -14,12 +14,12 @@ export interface DailyForecast {
                UnitType: number;
           };
      };
-     Day: {
+     Day?: {
           Icon: number;
           IconPhrase: string;
           HasPrecipitation: boolean;
      };
-     Night: {
+     Night?: {
           Icon: number;
           IconPhrase: string;
           HasPrecipitation: boolean;

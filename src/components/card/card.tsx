@@ -20,8 +20,6 @@ interface IBasicCard {
 }
 
 export default function BasicCard({ temperature, date, isFavoriteIcon }: IBasicCard) {
-     console.log('🚀 ~ file: card.tsx:23 ~ BasicCard ~ date:', date);
-     console.log('🚀 ~ file: card.tsx:23 ~ BasicCard ~ temperature:', temperature);
      const formatDate = (isoString: Date | string | number) => {
           const date = new Date(isoString);
           const options: any = {

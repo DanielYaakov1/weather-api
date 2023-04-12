@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import useStyles from './useStyles';
-import { useStorageService } from '../../services/useStorageService';
 import useWeatherAction from '../../actions/weather-action';
 import Search from '../../components/search';
 import { onlyEnglishLetters } from '../../utils/validation.helper';
 import CardItems from '../../components/cardItems';
-import { IDailyForecasts } from '../../components/cardItems/cardItems';
 import debounce from 'lodash.debounce';
-import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
+import { IDailyForecast, ICurrentWeather, ILocation } from '../../types/weatherForecast';
 
 interface IHomepage {
      favorites: ILocation[];
@@ -17,33 +15,47 @@ interface IHomepage {
 export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const classes = useStyles();
      const { searchLocationByName, getCurrentWeather, getDailyForecast } = useWeatherAction();
-     const storageService = useStorageService();
      const [isErrorSearch, setIsErrorSearch] = useState('');
      const [searchText, setSearchText] = useState('');
      const [locations, setLocations] = useState<ILocation[]>([]);
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
-     const [dailyForecast, setDailyForecast] = useState<IDailyForecasts[]>([]);
-     //------------------------------------------------------------------------------
+     const [dailyForecast, setDailyForecast] = useState<IDailyForecast[]>([]);
 
      // useEffect(() => {
-     //      const getForecastData = storageService.getItem('testDaniel');
-     //      const parseToJsonForecastData = JSON.parse(getForecastData as any);
-     //      setDailyForecast(parseToJsonForecastData);
-     // }, []);
+     //      //Check if the location is already in the favorites
+     //      const fetchDefaultTelAvivLocation = async () => {
+     //           const results = await searchLocationByName('Tel Aviv');
+     //           // this is plural
+     //           setLocations(results);
+     //           const currentRes = await getCurrentWeather(results[0].Key);
+     //           setCurrentWeather(currentRes);
+     //           const dailyForecast = await getDailyForecast(results[0].Key);
+     //           setDailyForecast(dailyForecast);
+     //      };
+     //      fetchDefaultTelAvivLocation();
+     // }, [getCurrentWeather, getDailyForecast, searchLocationByName]);
 
      useEffect(() => {
-          // check if location is already in favorites
+          let isMounted = true;
+
           const fetchDefaultTelAvivLocation = async () => {
                const results = await searchLocationByName('Tel Aviv');
-               // this is plural
+               if (!isMounted) return;
                setLocations(results);
-               //const currentRes = await getCurrentWeather(results[0].Key);
-               //setCurrentWeather(currentRes);
+               const currentRes = await getCurrentWeather(results[0].Key);
+               if (!isMounted) return;
+               setCurrentWeather(currentRes);
                const dailyForecast = await getDailyForecast(results[0].Key);
-               setDailyForecast(dailyForecast as any);
+               if (!isMounted) return;
+               setDailyForecast(dailyForecast);
           };
+
           fetchDefaultTelAvivLocation();
-     }, [getCurrentWeather, searchLocationByName]);
+
+          return () => {
+               isMounted = false;
+          };
+     }, [searchLocationByName, getCurrentWeather, getDailyForecast]);
 
      useEffect(() => {
           return () => {
@@ -60,9 +72,9 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
                     const currentRes = await getCurrentWeather(results[0].Key);
                     setCurrentWeather(currentRes);
                     const dailyForecast = await getDailyForecast(results[0].Key);
-                    setDailyForecast(dailyForecast as any);
+                    setDailyForecast(dailyForecast);
                }, 3000),
-          [getCurrentWeather, searchLocationByName]
+          [getCurrentWeather, getDailyForecast, searchLocationByName]
      );
 
      const handleSearch = useCallback(
@@ -72,7 +84,6 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
                     setIsErrorSearch('');
                     setSearchText(text);
                     debouncedChangeHandler(text);
-                    //setDailyForecast(weather5Days);
                } else {
                     setIsErrorSearch('Search can be only English!');
                }

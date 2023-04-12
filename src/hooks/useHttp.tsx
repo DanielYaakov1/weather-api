@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react';
 import axios from 'axios';
-// import useStorageService from '../services/useStorageService';
 import { FIVE_DAYS_MOCK } from '../mock/data';
 
 export const useHttp = () => {
