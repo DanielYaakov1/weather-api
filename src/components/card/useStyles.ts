@@ -3,10 +3,10 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles({
      root: {},
      card: {
-          width: 275,
-          minHeight: 100,
-          backgroundColor: 'rgb(63 81 181 / 19%)',
-          borderRadius: 10,
+          minWidth: '275px',
+          minHeight: '128px',
+          backgroundColor: '#fff',
+          borderRadius: 4,
           display: 'flex',
           flexDirection: 'column',
           flexWrap: 'wrap',

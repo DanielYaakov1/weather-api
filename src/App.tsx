@@ -13,10 +13,17 @@ function App() {
      return (
           <div className='App'>
                <Header />
-               <Routes>
-                    <Route path='/' element={<HomePage favorites={favorites} setFavorites={setFavorites} />} />
-                    <Route path='/favorites' element={<Favorites favorites={favorites} setFavorites={setFavorites} isFavorite={isFavorite} />} />
-               </Routes>
+               <div
+                    style={{
+                         minWidth: '100%',
+                         minHeight: '100vh',
+                         background: '#daf2ebf0',
+                    }}>
+                    <Routes>
+                         <Route path='/' element={<HomePage favorites={favorites} setFavorites={setFavorites} />} />
+                         <Route path='/favorites' element={<Favorites favorites={favorites} setFavorites={setFavorites} isFavorite={isFavorite} />} />
+                    </Routes>
+               </div>
           </div>
      );
 }

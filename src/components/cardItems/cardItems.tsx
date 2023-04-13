@@ -21,7 +21,6 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
           <React.Fragment>
                <div
                     style={{
-                         width: '250px',
                          display: 'inline-block',
                          margin: 7,
                     }}>

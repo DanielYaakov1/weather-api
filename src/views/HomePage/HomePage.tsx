@@ -21,20 +21,6 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
      const [dailyForecast, setDailyForecast] = useState<IDailyForecast[]>([]);
 
-     // useEffect(() => {
-     //      //Check if the location is already in the favorites
-     //      const fetchDefaultTelAvivLocation = async () => {
-     //           const results = await searchLocationByName('Tel Aviv');
-     //           // this is plural
-     //           setLocations(results);
-     //           const currentRes = await getCurrentWeather(results[0].Key);
-     //           setCurrentWeather(currentRes);
-     //           const dailyForecast = await getDailyForecast(results[0].Key);
-     //           setDailyForecast(dailyForecast);
-     //      };
-     //      fetchDefaultTelAvivLocation();
-     // }, [getCurrentWeather, getDailyForecast, searchLocationByName]);
-
      useEffect(() => {
           let isMounted = true;
 
@@ -66,7 +52,6 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const debouncedChangeHandler = useMemo(
           () =>
                debounce(async text => {
-                    debugger;
                     const results = await searchLocationByName(text);
                     setLocations(results);
                     const currentRes = await getCurrentWeather(results[0].Key);

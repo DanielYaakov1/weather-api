@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
      },
 
      header: {
-          width: '100%',
+          width: 'auto%',
           minHeight: '50px',
           backgroundColor: '#61D4D2',
           paddingLeft: '10px',

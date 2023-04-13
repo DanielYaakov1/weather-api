@@ -1,13 +1,9 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
-     root: {
-          width: '100%',
-          height: '100vh',
-          background: '#daf2ebf0',
-     },
+     root: {},
      search: {
-          margin: '20px',
+          padding: '10px',
      },
      dataContainer: {
           display: 'grid',
