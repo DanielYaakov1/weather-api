@@ -31,7 +31,7 @@ export interface ILocation {
      name: string;
      Country?: string;
      region?: string;
-     LocalizedName?: string;
+     LocalizedName: string;
 }
 
 export interface ICurrentWeather {

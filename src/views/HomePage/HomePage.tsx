@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import useStyles from './useStyles';
-import useWeatherAction from '../../actions/weather-action';
+import useWeatherAction from '../../actions/useWeatherAction';
 import Search from '../../components/search';
 import { onlyEnglishLetters } from '../../utils/validation.helper';
 import CardItems from '../../components/cardItems';
@@ -18,8 +18,11 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const [isErrorSearch, setIsErrorSearch] = useState('');
      const [searchText, setSearchText] = useState('');
      const [locations, setLocations] = useState<ILocation[]>([]);
+     const [test, setTest] = useState<ILocation[]>([]);
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
      const [dailyForecast, setDailyForecast] = useState<IDailyForecast[]>([]);
+     const [selectedLocation, setSelectedLocation] = useState<ILocation | null>(null);
+     const [isLoading, setIsLoading] = useState(false);
 
      useEffect(() => {
           let isMounted = true;
@@ -53,13 +56,14 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
           () =>
                debounce(async text => {
                     const results = await searchLocationByName(text);
+                    setTest(results);
                     setLocations(results);
                     const currentRes = await getCurrentWeather(results[0].Key);
                     setCurrentWeather(currentRes);
                     const dailyForecast = await getDailyForecast(results[0].Key);
                     setDailyForecast(dailyForecast);
                }, 3000),
-          [getCurrentWeather, getDailyForecast, searchLocationByName]
+          [getCurrentWeather, getDailyForecast, searchLocationByName, setTest]
      );
 
      const handleSearch = useCallback(
@@ -79,7 +83,7 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      return (
           <div className={classes.root}>
                <div className={classes.search}>
-                    <Search searchText={searchText} onSearch={handleSearch} placeholder={'Search location'} isErrorMessage={isErrorSearch} />
+                    <Search searchText={searchText} onSearch={handleSearch} placeholder={'Search location'} isErrorMessage={isErrorSearch} locations={test} />
                </div>
                <CardItems setFavorites={setFavorites} favorites={favorites} location={locations[0]} currentWeather={currentWeather} forecast={dailyForecast} />
           </div>

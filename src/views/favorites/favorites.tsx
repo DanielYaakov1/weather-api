@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { CurrentWeatherCard } from '../../components/card/current-weather-card';
 
 import useStyles from './useStyles';
-import useWeatherAction from '../../actions/weather-action';
+import useWeatherAction from '../../actions/useWeatherAction';
 import React from 'react';
 import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
 
