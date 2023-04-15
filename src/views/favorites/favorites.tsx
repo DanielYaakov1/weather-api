@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CurrentWeatherCard } from '../../components/card/current-weather-card';
+import { CurrentWeatherCard } from '../../components/currentWeatherCard/current-weather-card';
 
 import useStyles from './useStyles';
 import useWeatherAction from '../../actions/useWeatherAction';

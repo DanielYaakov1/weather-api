@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 
-interface IBasicCard {
+interface IDailyForecastCard {
      date: Date;
      temperature: {
           Maximum: {
@@ -19,7 +19,7 @@ interface IBasicCard {
      isFavoriteIcon: boolean;
 }
 
-export default function BasicCard({ temperature, date, isFavoriteIcon }: IBasicCard) {
+export default function DailyForecastCard({ temperature, date, isFavoriteIcon }: IDailyForecastCard) {
      const formatDate = (isoString: Date | string | number) => {
           const date = new Date(isoString);
           const options: any = {

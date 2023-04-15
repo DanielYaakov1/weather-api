@@ -8,29 +8,34 @@ interface SearchBarProps {
      placeholder: string;
      isErrorMessage: string;
      locations: ILocation[];
+     onLocationSelect: (location: ILocation) => void;
 }
 
-const SearchBar = memo(({ searchText, onSearch, placeholder, isErrorMessage, locations }: SearchBarProps) => {
+const SearchBar = memo(({ searchText, onSearch, placeholder, isErrorMessage, locations, onLocationSelect }: SearchBarProps) => {
      const classes = useStyles();
      const [isShow, setIsShow] = useState(false);
      const [newFilteredLocations, setNewFilteredLocations] = useState<ILocation[]>([]);
      const [active, setActive] = useState(0);
 
      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-          onSearch(event.target.value);
           const newFilteredSuggestions = locations.filter((location: ILocation) => location.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
+          onSearch(event.target.value);
           setActive(0);
           setNewFilteredLocations(newFilteredSuggestions);
           setIsShow(true);
      };
 
-     const onClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, locationKey: string) => {
-          setActive(0);
-          setNewFilteredLocations([]);
+     const handleSelectLocation = (location: ILocation) => {
           setIsShow(false);
-          onSearch(event.currentTarget.innerText);
-          //onSearch(locationKey);
-          //console.log('location key', locationKey);
+          setNewFilteredLocations([]);
+          onLocationSelect(location); // calling onLocationSelect with the selected location
+     };
+
+     const onClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, locationKey: string) => {
+          const selectedLocation: ILocation | undefined = locations.find(location => location.Key === locationKey);
+          selectedLocation ? handleSelectLocation(selectedLocation) : console.error('selectedLocation is undefined');
+          setIsShow(false);
+          setActive(0);
      };
 
      return (

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import BasicCard from '../card/card';
+
 import useStyles from './useStyles';
 import { IDailyForecast, ICurrentWeather, ILocation } from '../../types/weatherForecast';
-import { CurrentWeatherCard } from '../card/current-weather-card';
+import { CurrentWeatherCard } from '../currentWeatherCard/current-weather-card';
+import DailyForecastCard from '../dailyForecastCard/daily-forecast-card';
 
 interface ICardItems {
      forecast: IDailyForecast[];
@@ -31,7 +32,7 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
                          forecast.map((_dailyForecast: IDailyForecast) => {
                               return (
                                    <div key={_dailyForecast.EpochDate} className='card'>
-                                        <BasicCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} />
+                                        <DailyForecastCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} />
                                    </div>
                               );
                          })}

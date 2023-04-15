@@ -18,7 +18,6 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const [isErrorSearch, setIsErrorSearch] = useState('');
      const [searchText, setSearchText] = useState('');
      const [locations, setLocations] = useState<ILocation[]>([]);
-     const [test, setTest] = useState<ILocation[]>([]);
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
      const [dailyForecast, setDailyForecast] = useState<IDailyForecast[]>([]);
      const [selectedLocation, setSelectedLocation] = useState<ILocation | null>(null);
@@ -54,16 +53,13 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
 
      const debouncedChangeHandler = useMemo(
           () =>
-               debounce(async text => {
-                    const results = await searchLocationByName(text);
-                    setTest(results);
-                    setLocations(results);
-                    const currentRes = await getCurrentWeather(results[0].Key);
-                    setCurrentWeather(currentRes);
-                    const dailyForecast = await getDailyForecast(results[0].Key);
-                    setDailyForecast(dailyForecast);
-               }, 3000),
-          [getCurrentWeather, getDailyForecast, searchLocationByName, setTest]
+               debounce(async (text: string) => {
+                    setIsLoading(true);
+                    const locationsResult = await searchLocationByName(text);
+                    setLocations(locationsResult);
+                    setIsLoading(false);
+               }, 300),
+          [searchLocationByName]
      );
 
      const handleSearch = useCallback(
@@ -80,10 +76,21 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
           [debouncedChangeHandler]
      );
 
+     const handleSelectLocation = async (selectedLocation: ILocation) => {
+          setSearchText(selectedLocation.name);
+          setIsErrorSearch('');
+          setLocations([selectedLocation]);
+          // setLocations([]);
+          // setSelectedLocation(selectedLocation);
+          const currentRes = await getCurrentWeather(selectedLocation.Key);
+          setCurrentWeather(currentRes);
+          const dailyForecast = await getDailyForecast(selectedLocation.Key);
+          setDailyForecast(dailyForecast);
+     };
      return (
           <div className={classes.root}>
                <div className={classes.search}>
-                    <Search searchText={searchText} onSearch={handleSearch} placeholder={'Search location'} isErrorMessage={isErrorSearch} locations={test} />
+                    <Search searchText={searchText} onSearch={handleSearch} onLocationSelect={handleSelectLocation} placeholder={'Search location'} isErrorMessage={isErrorSearch} locations={locations} />
                </div>
                <CardItems setFavorites={setFavorites} favorites={favorites} location={locations[0]} currentWeather={currentWeather} forecast={dailyForecast} />
           </div>
