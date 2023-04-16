@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import useStyles from './useStyles';
 import { IDailyForecast, ICurrentWeather, ILocation } from '../../types/weatherForecast';
 import { CurrentWeatherCard } from '../currentWeatherCard/current-weather-card';
@@ -32,7 +31,7 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
                          forecast.map((_dailyForecast: IDailyForecast) => {
                               return (
                                    <div key={_dailyForecast.EpochDate} className='card'>
-                                        <DailyForecastCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} />
+                                        <DailyForecastCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} iconDayNumber={_dailyForecast.iconDayNumber} iconNightNumber={_dailyForecast.iconNightNumber}/>
                                    </div>
                               );
                          })}

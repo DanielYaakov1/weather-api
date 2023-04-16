@@ -14,12 +14,12 @@ export interface IDailyForecast {
                UnitType: number;
           };
      };
-     Day?: {
+     Day: {
           Icon: number;
           IconPhrase: string;
           HasPrecipitation: boolean;
      };
-     Night?: {
+     Night: {
           Icon: number;
           IconPhrase: string;
           HasPrecipitation: boolean;
@@ -42,4 +42,5 @@ export interface ICurrentWeather {
           };
      };
      WeatherText: string;
+     WeatherIcon:number
 }

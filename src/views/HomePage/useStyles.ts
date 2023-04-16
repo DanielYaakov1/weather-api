@@ -10,6 +10,13 @@ const useStyles = makeStyles({
      dataContainer: {
           display: 'grid',
      },
+     loading:{
+          position: 'absolute',
+          top: "50%",
+          left: '50%',
+
+     }
+
 });
 
 export default useStyles;

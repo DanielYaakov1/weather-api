@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { CurrentWeatherCard } from '../../components/currentWeatherCard/current-weather-card';
-
-import useStyles from './useStyles';
 import useWeatherAction from '../../actions/useWeatherAction';
 import React from 'react';
 import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
@@ -13,7 +11,6 @@ interface IFavorites {
 }
 
 export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) => {
-     const classes = useStyles();
      const { getCurrentWeather } = useWeatherAction();
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
 
@@ -45,6 +42,7 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
                     <div
                          style={{
                               display: 'flex',
+
                          }}>
                          {favorites.map((favoritesLocation: ILocation, i: number) => {
                               return (
@@ -59,7 +57,11 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
                          })}
                     </div>
                ) : (
+                   <div style={{
+                        fontFamily:'cursive'
+                   }}>
                     'There is no favorites locations'
+                   </div>
                )}
           </>
      );

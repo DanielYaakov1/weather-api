@@ -4,13 +4,12 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
      activeIcon: {
           '& .MuiIconButton-root': {
                color: 'white',
           },
      },
-
      header: {
           width: 'auto%',
           minHeight: '50px',
@@ -26,7 +25,7 @@ const useStyles = makeStyles(theme => ({
           },
      },
      navLink: { display: 'inline-block', alignItems: 'center', flexWrap: 'nowrap', margin: '10px' },
-}));
+});
 
 export const Header = () => {
      const classes = useStyles();

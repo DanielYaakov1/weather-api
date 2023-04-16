@@ -2,8 +2,8 @@ import { useHttp } from '../hooks/useHttp';
 import { useCallback } from 'react';
 import { ICurrentWeather, ILocation, IDailyForecast } from '../types/weatherForecast';
 
-const API_KEY = 'keIkcwQuwHMsCqZJawOVskNUec3ErVQq';
-const BASE_URL = 'http://dataservice.accuweather.com';
+const API_KEY = 'tPl3QGT9w9mLN2AF7bKcSc785t18btvO'; // jdJtjY5LHZvdj0IS8iiRqturSfo6sjq3 // cwlzjnKODPSt5tGLh63JEXDKL03vtfMB //keIkcwQuwHMsCqZJawOVskNUec3ErVQq
+const BASE_URL = 'https://dataservice.accuweather.com';
 const API_VERSION = 'v1';
 
 const useWeatherAction = () => {
@@ -14,7 +14,8 @@ const useWeatherAction = () => {
                const res = await httpRequest(`${BASE_URL}/currentconditions/${API_VERSION}/${locationKeys}?apikey=${API_KEY}`);
                const currentWeather = res.map((weather: ICurrentWeather) => {
                     return {
-                         WeatherText: weather.WeatherText,
+                        WeatherText: weather.WeatherText,
+                        WeatherIcon:weather.WeatherIcon,
                          Temperature: {
                               Metric: {
                                    Value: weather.Temperature.Metric?.Value,
@@ -59,6 +60,8 @@ const useWeatherAction = () => {
                     UnitType: forecast.Temperature.Maximum.UnitType,
                     Temperature: forecast.Temperature,
                     EpochDate: forecast.EpochDate,
+                    iconDayNumber:forecast.Day?.Icon,
+                    iconNightNumber:forecast.Night?.Icon
                }));
           },
           [httpRequest]

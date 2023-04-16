@@ -18,7 +18,7 @@ const SearchBar = memo(({ searchText, onSearch, placeholder, isErrorMessage, loc
      const [active, setActive] = useState(0);
 
      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-          const newFilteredSuggestions = locations.filter((location: ILocation) => location.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
+          const newFilteredSuggestions = locations.filter((location: ILocation) => location.name?.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
           onSearch(event.target.value);
           setActive(0);
           setNewFilteredLocations(newFilteredSuggestions);

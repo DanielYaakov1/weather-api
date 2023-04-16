@@ -3,6 +3,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import useStyles from './useStyles';
 import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
+import WeatherIcon from "../weatherIcon/weatherIcon";
 
 interface WeatherCardProps {
      currentWeather: ICurrentWeather;
@@ -10,6 +11,7 @@ interface WeatherCardProps {
      isFavorite: boolean;
      setFavorites: React.Dispatch<React.SetStateAction<ILocation[]>>;
 }
+
 
 export const CurrentWeatherCard = ({ currentWeather, location, isFavorite, setFavorites }: WeatherCardProps) => {
      const classes = useStyles();
@@ -26,17 +28,22 @@ export const CurrentWeatherCard = ({ currentWeather, location, isFavorite, setFa
      return (
           <>
                <div className={classes.card}>
+                    <div className={classes.icon}>
+                         <WeatherIcon iconNumber={currentWeather?.WeatherIcon}/>
+                    </div>
+                    <div className={classes.details}>
                     <div className={classes.title}>
                          <div>{location?.name}</div>
                     </div>
                     <div className={classes.temperature}>
-                         <div>{currentWeather && currentWeather?.Temperature?.Metric.Value} °C</div>
+                         <div>{currentWeather && currentWeather?.Temperature?.Metric.Value} °C </div>
                     </div>
                     {location && (
-                         <IconButton onClick={handleFavorite} aria-label='add to favorites' style={{ color: isFavorite ? 'red' : '' }}>
+                         <IconButton onClick={handleFavorite} aria-label='add to favorites' style={{ color: isFavorite ? 'red' : '', }}>
                               <FavoriteIcon />
                          </IconButton>
                     )}
+               </div>
                </div>
           </>
      );

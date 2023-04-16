@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useStyles from './useStyles';
 import useWeatherAction from '../../actions/useWeatherAction';
 import Search from '../../components/search';
@@ -45,22 +45,23 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
           };
      }, [searchLocationByName, getCurrentWeather, getDailyForecast]);
 
-     useEffect(() => {
-          return () => {
-               debouncedChangeHandler.cancel();
-          };
-     }, []);
+
 
      const debouncedChangeHandler = useMemo(
           () =>
                debounce(async (text: string) => {
-                    setIsLoading(true);
+                    setIsLoading(false);
                     const locationsResult = await searchLocationByName(text);
                     setLocations(locationsResult);
-                    setIsLoading(false);
                }, 300),
           [searchLocationByName]
      );
+
+     useEffect(() => {
+          return () => {
+               debouncedChangeHandler.cancel();
+          };
+     }, [debouncedChangeHandler]);
 
      const handleSearch = useCallback(
           async (text: string) => {
@@ -68,6 +69,7 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
                if (isSearchIncludeEnglishChars) {
                     setIsErrorSearch('');
                     setSearchText(text);
+                    setIsLoading(true);
                     debouncedChangeHandler(text);
                } else {
                     setIsErrorSearch('Search can be only English!');
@@ -92,7 +94,9 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
                <div className={classes.search}>
                     <Search searchText={searchText} onSearch={handleSearch} onLocationSelect={handleSelectLocation} placeholder={'Search location'} isErrorMessage={isErrorSearch} locations={locations} />
                </div>
+               {isLoading ? <div className={classes.loading}>Loading...</div> :
                <CardItems setFavorites={setFavorites} favorites={favorites} location={locations[0]} currentWeather={currentWeather} forecast={dailyForecast} />
+               }
           </div>
      );
 };
