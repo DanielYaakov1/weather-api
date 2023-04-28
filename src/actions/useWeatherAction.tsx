@@ -14,8 +14,8 @@ const useWeatherAction = () => {
                const res = await httpRequest(`${BASE_URL}/currentconditions/${API_VERSION}/${locationKeys}?apikey=${API_KEY}`);
                const currentWeather = res.map((weather: ICurrentWeather) => {
                     return {
-                        WeatherText: weather.WeatherText,
-                        WeatherIcon:weather.WeatherIcon,
+                         WeatherText: weather.WeatherText,
+                         WeatherIcon: weather.WeatherIcon,
                          Temperature: {
                               Metric: {
                                    Value: weather.Temperature.Metric?.Value,
@@ -60,8 +60,8 @@ const useWeatherAction = () => {
                     UnitType: forecast.Temperature.Maximum.UnitType,
                     Temperature: forecast.Temperature,
                     EpochDate: forecast.EpochDate,
-                    iconDayNumber:forecast.Day?.Icon,
-                    iconNightNumber:forecast.Night?.Icon
+                    iconDayNumber: forecast.Day?.Icon,
+                    iconNightNumber: forecast.Night?.Icon,
                }));
           },
           [httpRequest]
