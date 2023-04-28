@@ -8,8 +8,6 @@ import { ILocation } from './types/weatherForecast';
 
 function App() {
      const [favorites, setFavorites] = useState<ILocation[]>([]);
-     const isFavorite = !!favorites.find(favorite => favorite.Key === favorites[0]?.Key);
-
      return (
           <div className='App'>
                <Header />
@@ -21,7 +19,7 @@ function App() {
                     }}>
                     <Routes>
                          <Route path='/' element={<HomePage favorites={favorites} setFavorites={setFavorites} />} />
-                         <Route path='/favorites' element={<Favorites favorites={favorites} setFavorites={setFavorites} isFavorite={isFavorite} />} />
+                         <Route path='/favorites' element={<Favorites favorites={favorites} setFavorites={setFavorites} />} />
                     </Routes>
                </div>
           </div>

@@ -20,7 +20,6 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
      const [locations, setLocations] = useState<ILocation[]>([]);
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
      const [dailyForecast, setDailyForecast] = useState<IDailyForecast[]>([]);
-     const [selectedLocation, setSelectedLocation] = useState<ILocation | null>(null);
      const [isLoading, setIsLoading] = useState(false);
 
      useEffect(() => {
@@ -45,14 +44,12 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
           };
      }, [searchLocationByName, getCurrentWeather, getDailyForecast]);
 
-
-
      const debouncedChangeHandler = useMemo(
           () =>
                debounce(async (text: string) => {
-                    setIsLoading(false);
                     const locationsResult = await searchLocationByName(text);
                     setLocations(locationsResult);
+                    setIsLoading(false);
                }, 300),
           [searchLocationByName]
      );
@@ -94,9 +91,7 @@ export const HomePage = ({ favorites, setFavorites }: IHomepage) => {
                <div className={classes.search}>
                     <Search searchText={searchText} onSearch={handleSearch} onLocationSelect={handleSelectLocation} placeholder={'Search location'} isErrorMessage={isErrorSearch} locations={locations} />
                </div>
-               {isLoading ? <div className={classes.loading}>Loading...</div> :
-               <CardItems setFavorites={setFavorites} favorites={favorites} location={locations[0]} currentWeather={currentWeather} forecast={dailyForecast} />
-               }
+               {isLoading ? <div className={classes.loading}>Loading...</div> : <CardItems setFavorites={setFavorites} favorites={favorites} location={locations[0]} currentWeather={currentWeather} forecast={dailyForecast} />}
           </div>
      );
 };

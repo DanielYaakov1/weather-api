@@ -14,20 +14,16 @@ interface SearchBarProps {
 const SearchBar = memo(({ searchText, onSearch, placeholder, isErrorMessage, locations, onLocationSelect }: SearchBarProps) => {
      const classes = useStyles();
      const [isShow, setIsShow] = useState(false);
-     const [newFilteredLocations, setNewFilteredLocations] = useState<ILocation[]>([]);
      const [active, setActive] = useState(0);
 
      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-          const newFilteredSuggestions = locations.filter((location: ILocation) => location.name?.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
           onSearch(event.target.value);
           setActive(0);
-          setNewFilteredLocations(newFilteredSuggestions);
           setIsShow(true);
      };
 
      const handleSelectLocation = (location: ILocation) => {
           setIsShow(false);
-          setNewFilteredLocations([]);
           onLocationSelect(location); // calling onLocationSelect with the selected location
      };
 
@@ -43,8 +39,8 @@ const SearchBar = memo(({ searchText, onSearch, placeholder, isErrorMessage, loc
                <input className={classes.input} type='text' placeholder={placeholder} value={searchText} onChange={handleInputChange} />
                {isShow && searchText && (
                     <ul className={classes.autocomplete}>
-                         {newFilteredLocations.length ? (
-                              newFilteredLocations.map((location: ILocation, index) => (
+                         {locations.length ? (
+                              locations.map((location: ILocation, index) => (
                                    <li key={location.Key} className={`${classes.autocompleteItem} ${index === active ? classes.autocompleteActiveItem : ''}`} onClick={e => onClick(e, location.Key)}>
                                         {location.name}
                                    </li>

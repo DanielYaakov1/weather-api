@@ -18,7 +18,7 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
      const isFavorite = !!favorites.find(favorite => favorite.Key === location?.Key);
 
      return (
-          <React.Fragment>
+          <>
                <div
                     style={{
                          display: 'inline-block',
@@ -31,11 +31,11 @@ export const CardItems = React.memo(({ forecast, currentWeather, location, favor
                          forecast.map((_dailyForecast: IDailyForecast) => {
                               return (
                                    <div key={_dailyForecast.EpochDate} className='card'>
-                                        <DailyForecastCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} iconDayNumber={_dailyForecast.iconDayNumber} iconNightNumber={_dailyForecast.iconNightNumber}/>
+                                        <DailyForecastCard date={_dailyForecast.Date} temperature={_dailyForecast.Temperature} isFavoriteIcon={false} iconDayNumber={_dailyForecast.iconDayNumber} iconNightNumber={_dailyForecast.iconNightNumber} />
                                    </div>
                               );
                          })}
                </div>
-          </React.Fragment>
+          </>
      );
 });

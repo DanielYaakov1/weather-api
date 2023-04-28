@@ -7,10 +7,9 @@ import { ICurrentWeather, ILocation } from '../../types/weatherForecast';
 interface IFavorites {
      favorites: ILocation[];
      setFavorites: React.Dispatch<React.SetStateAction<ILocation[]>>;
-     isFavorite: boolean;
 }
 
-export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) => {
+export const Favorites = ({ favorites, setFavorites }: IFavorites) => {
      const { getCurrentWeather } = useWeatherAction();
      const [currentWeather, setCurrentWeather] = useState<ICurrentWeather[]>([]);
 
@@ -27,13 +26,9 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
 
      const handleFavorite = React.useCallback(
           (selectedLocation: ILocation) => {
-               if (isFavorite) {
-                    setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.Key !== selectedLocation.Key));
-               } else {
-                    setFavorites((prevFavorites: ILocation[]) => [...prevFavorites, selectedLocation]);
-               }
+               setFavorites((prevFavorites: ILocation[]) => prevFavorites.filter(favLocation => favLocation.Key !== selectedLocation.Key));
           },
-          [isFavorite, setFavorites]
+          [setFavorites]
      );
 
      return (
@@ -42,7 +37,6 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
                     <div
                          style={{
                               display: 'flex',
-
                          }}>
                          {favorites.map((favoritesLocation: ILocation, i: number) => {
                               return (
@@ -50,18 +44,19 @@ export const Favorites = ({ favorites, setFavorites, isFavorite }: IFavorites) =
                                         <h2>{favoritesLocation.name}</h2>
                                         {currentWeather[i] &&
                                              currentWeather[i].map((weather: ICurrentWeather, j: number) => {
-                                                  return <CurrentWeatherCard key={j} location={favoritesLocation} isFavorite={isFavorite} currentWeather={weather} setFavorites={() => handleFavorite(favoritesLocation)} />;
+                                                  return <CurrentWeatherCard key={j} location={favoritesLocation} isFavorite={true} currentWeather={weather} setFavorites={() => handleFavorite(favoritesLocation)} />;
                                              })}
                                    </div>
                               );
                          })}
                     </div>
                ) : (
-                   <div style={{
-                        fontFamily:'cursive'
-                   }}>
-                    'There is no favorites locations'
-                   </div>
+                    <div
+                         style={{
+                              fontFamily: 'cursive',
+                         }}>
+                         'There is no favorites locations'
+                    </div>
                )}
           </>
      );
